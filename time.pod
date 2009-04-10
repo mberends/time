@@ -1,0 +1,131 @@
+=head1 NAME
+[TODO] Time RFC
+
+=head1 SYNOPSIS
+From L<http://irclog.perlgeek.de/perl6/2009-04-08>:
+
+ 07:02 <mberends> masak: after we conque^H^H^H^H^H^Hfinish our projects,
+                         we should re-implement time.
+ 07:03 <masak> mberends: I agree. I have a local git repo with some
+                         early timespace implementations.
+ 07:03         mberends: but they're in Perl 7.
+
+=head1 DESCRIPTION
+This document missed the April 2001 Perl 6 RFC deadline, self
+referentially confirming the need for more effective time control.
+Perl 6 took some steps in the right direction, such as Junction and
+Temporal. Experience with those helped round out this proposal.
+
+Unfortunately most of the proposed design can be written only in
+pseudocode, because Perl 6 does not distinguish real time, actual time
+etc.
+
+=head1 MOTIVATION
+A surprisingly high proportion of application code (and CPAN libraries)
+grapples with aspects of time, and many parts are mutually incompatible.
+Here are the problems often mentioned online:
+
+=head2 Singleton
+Whatever modules are used, the basic assumption is just one time scale.
+Just like single threading, it's a narrow way to regard time. No
+meaningful .new() or array of timescales are available. If parallel
+universes can be imagined, surely multiple timescales are trivial.
+
+=head2 1-D
+Newtonian time is basically all we imagine and use. Rather like the tape
+in a Turing Machine, but worse because you can only go forwards and have
+almost no control of the speed. Bidirectional and 2-D are high
+priorities for the next generation time system.
+
+=head2 Nonrepeatable
+Even with unidirectional 1-D time, a proper .clone() for time that works
+like fork() would permit repeatable and fake restartable execution. The
+movie Groundhog Day showed some real world use cases. Of course current
+cryptography would not withstand parallel time attacks, and would also
+need to be redesigned.
+
+=head1 Brave New World
+We can turn the apparent negatives listed above into positives about the
+proposed new specification.
+
+=head1 Time::Real
+In Perl 5 and 6 C<Time::Real> was the best approach, but shortcomings
+such as unidirectionality and overlooking relativistic effects are
+disappointing. The following design extends this prior approach.
+
+OS support for realtime applications is improving. Even the Windows 7
+scheduler could act as host if the kernel stopped virtualizing hours,
+minutes and seconds.
+
+=head1 Time::Absolute
+The proposed name C<Time::Absolute> indicates that this will be the One
+True Way to handle time.
+The One True Way to measure time is from the Big Bang, in units
+of electron orbits around a hydrogen nucleus at absolute zero. We are
+currently around 4.2E27 on that scale, beyond 64 bit precision but well
+under the 128 bit barrier.
+C<Time::Absolute> is not a class name like C<Time::Real> because Perl 6
+classes, for example, cannot do predictive algebra. Perl 7 will provide
+the necessary language constructs.
+
+=head1 Time::Relative
+Mainly to support backward compatibility, C<Time::Relative> can also
+correct dilation associated with acceleration, dark matter etc.
+Parameterized instances of Relative Time can emulate legacy time scales,
+such as ephemeris time, UTC, the Unix epoch, and even Mayan, Gregorian
+and Julian calendars.
+
+=head1 FUNCTIONS
+
+=head2 time
+In all versions up to Perl 6, calling C<time()> in scalar context
+returned a value in Unix time. Fair enough, but Absolute Time obsoletes
+that and should become the default return type in 128 bits. Casting
+Absolute Time to Int will convert to Unix time.
+
+=head1 METHODS
+
+=head2 this
+The expression C<this time> is syntactic sugar for C<Time::Absolute.this()>.
+
+=head2 next
+The expression C<next time> is syntactic sugar for C<Time::Absolute.next()>.
+
+=head2 was
+The expression C<time was> creates a Junction contrasting
+C<Time::Absolute.now()> and C<Time::Absolute.previous()>.
+
+=head2 all
+C<for all time> creates an infinite loop. Unlike C<while True> that can
+can be conditionally terminated from within, C<for all time> stops only
+when the hardware running it is destroyed.
+
+=head2 flies
+The expression C<time flies> appends an extra comment to a previous
+comment, to the effect that the writer of C<time flies> had been unaware
+of the interval between an earlier referenced event and thesse comments,
+but has become aware of its magnitude.
+
+=head2 reverse
+This depends on unimplemented hardware support. As with quantum
+computing, we can define how the software should behave in anticipation
+of an eventual device. Recursively applying the maxim Built It And They
+Will Come, a computer equipped with time control will be able cause its
+own invention and bootstrap the implementation, as long as is has
+Purpose. Therefore the present lack of hardware is not a major blocker.
+In fact a large investment to refine Purpose in this design might lead
+to a huge technological advance.
+
+class Time
+"class" fails to express the full power of Time. The requirements were
+A better construct is
+definitely needed, perhaps something to consider in Perl 7.
+
+has @.tuit;
+Developers frequently complain about a lack of tuits.
+
+=head1 JIT
+These ugly patches just obstruct the imponly hinder the 
+
+=head1 SEE ALSO
+
